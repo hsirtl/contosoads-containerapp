@@ -12,7 +12,7 @@ on:
       - '.github/workflows/**'
 
 env:
-    # Specify your resource group's name
+    # Specify your resource group's name (changed)
     RESOURCE_GROUP_NAME: contosoadsrg
 
     # Specify your preferred region
