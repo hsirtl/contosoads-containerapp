@@ -13,10 +13,10 @@ on:
 
 env:
     # Specify your resource group's name
-    RESOURCE_GROUP_NAME: contosoads-kor
+    RESOURCE_GROUP_NAME: contosoads
 
     # Specify your preferred region
-    LOCATION: koreacentral
+    LOCATION: northeurope
   
     # Specify login credentials for PostgreSQL
     DB_LOGIN: contosoads
