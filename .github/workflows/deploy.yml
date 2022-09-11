@@ -13,10 +13,10 @@ on:
 
 env:
     # Specify your resource group's name
-    RESOURCE_GROUP_NAME: contosoads-eastasia
+    RESOURCE_GROUP_NAME: contosoads-aus
 
     # Specify your preferred region
-    LOCATION: eastasia
+    LOCATION: australiaeast
   
     # Specify login credentials for PostgreSQL
     DB_LOGIN: contosoads
