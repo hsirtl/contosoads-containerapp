@@ -13,10 +13,10 @@ on:
 
 env:
     # Specify your resource group's name
-    RESOURCE_GROUP_NAME: contosoads-central
+    RESOURCE_GROUP_NAME: contosoads-northcentralus
 
     # Specify your preferred region
-    LOCATION: centralus
+    LOCATION: northcentralus
   
     # Specify login credentials for PostgreSQL
     DB_LOGIN: contosoads
