@@ -29,6 +29,7 @@ param repository string
 
 var vnetName = '${baseName}-vnet'
 var keyVaultName = '${baseName}${uniqueString(resourceGroup().id)}'
+var acrName = '${baseName}${uniqueString(resourceGroup().id)}'
 var storageAccountName = '${baseName}${uniqueString(resourceGroup().id)}'
 var privateDnsZoneName = '${baseName}.postgres.database.azure.com'
 var postgresHostName = 'server${uniqueString(resourceGroup().id)}'
@@ -80,6 +81,7 @@ module webapp 'modules/webapp.bicep' = {
   name: 'webapp'
   params: {
     location: location
+    registryName: acrName
     tag: webAppTag
     environmentId: environment.outputs.environmentId
     postgresHostName: postgresHostName
@@ -95,6 +97,7 @@ module imageprocessor 'modules/imageprocessor.bicep' = {
   name: 'imageprocessor'
   params: {
     location: location
+    registryName: acrName
     tag: imageProcessorTag
     environmentId: environment.outputs.environmentId
     aiConnectionString: environment.outputs.aiConnectionString

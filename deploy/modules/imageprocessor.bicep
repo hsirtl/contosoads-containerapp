@@ -1,3 +1,6 @@
+@description('Specifies the registry of the ContosoAds web application container.')
+param registryName string
+
 @description('Specifies the tag of the ContosoAds image processor container.')
 param tag string
 
@@ -36,7 +39,7 @@ resource imageProcessor 'Microsoft.App/containerApps@2022-03-01' = {
     template: {
       containers: [
         {
-          image: 'joergjo/contosoads-imageprocessor:${tag}'
+          image: '${registryName}/contosoads-imageprocessor:${tag}'
           name: 'contosoads-imageprocessor'
           env: [
             {
