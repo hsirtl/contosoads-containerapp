@@ -22,7 +22,7 @@ env:
     DB_LOGIN: contosoads
     
     # Specify your GitHub repo to source the DB migration script from (must be public)
-    REPOSITORY: 'https://github.com/joergjo/contosoads-containerapp.git'
+    REPOSITORY: 'https://github.com/hsirtl/contosoads-containerapp.git'
 
 jobs:
   deploy:
