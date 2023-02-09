@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ContosoAds.Web.Model;
-using Xunit;
 
 namespace ContosoAds.Web.IntegrationTests.Pages.Ads;
 
@@ -19,7 +18,7 @@ public class EditTest : IClassFixture<TestWebApplicationFactory>
     }
 
     [Fact]
-    public async Task Post_Redirects_ToAds()
+    public async Task Post_RedirectsTo_Ads()
     {
         // Arrange
         await _factory.SeedDatabaseAsync(
@@ -63,7 +62,7 @@ public class EditTest : IClassFixture<TestWebApplicationFactory>
     }
     
     [Fact]
-    public async Task Post_ForInValidId_ReturnsNotFound()
+    public async Task Post_ForInValidId_Returns_NotFound()
     {
         // Arrange
         await _factory.SeedDatabaseAsync(

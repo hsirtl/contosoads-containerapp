@@ -3,7 +3,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using ContosoAds.Web.Model;
-using Xunit;
 
 namespace ContosoAds.Web.IntegrationTests.Pages.Ads;
 
@@ -21,7 +20,7 @@ public class CommonPageTest : IClassFixture<TestWebApplicationFactory>
     [InlineData("delete", "Delete Ad")]
     [InlineData("details", "Details")]
     [InlineData("edit", "Edit Ad")]
-    public async Task Get_ReturnsOkAndPage(string action, string pageTitle)
+    public async Task Get_Returns_OkAndPage(string action, string pageTitle)
     {
         // Arrange
         var id = (await _factory.SeedDatabaseAsync(
@@ -58,7 +57,7 @@ public class CommonPageTest : IClassFixture<TestWebApplicationFactory>
     [InlineData("9999", "edit")]
     [InlineData("abc", "edit")]
     [InlineData("this cannot work", "edit")]
-    public async Task Get_WithInvalidId_ReturnsNotFound(string id, string action)
+    public async Task Get_WithInvalidId_Returns_NotFound(string id, string action)
     {
         // Arrange
         await _factory.SeedDatabaseAsync();
