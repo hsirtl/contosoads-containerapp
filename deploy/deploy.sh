@@ -17,7 +17,7 @@ webapp_tag=${CONTOSOADS_WEBAPP_TAG:-stable}
 imageprocessor_tag=${CONTOSOADS_IMAGEPROCESSOR_TAG:-stable}
 deployment_name="$base_name-$(date +%s)"
 postgres_login=$base_name
-postgres_version=${CONTOSOADS_POSTGRES_VERSION:-13}
+postgres_version=${CONTOSOADS_POSTGRES_VERSION:-14}
 repository=${CONTOSOADS_REPO:-'https://github.com/joergjo/contosoads-containerapp.git'}
 
 az group create \
@@ -29,8 +29,14 @@ fqdn=$(az deployment group create \
   --name "$deployment_name" \
   --template-file main.bicep \
   --parameters postgresLogin="$postgres_login" postgresLoginPassword="$postgres_login_password" \
-    webAppTag="$webapp_tag" imageProcessorTag="$imageprocessor_tag" repository="$repository" \
+    webAppTag="$webapp_tag" imageProcessorTag="$imageprocessor_tag" \
+    repository="$repository" postgresVersion="$postgres_version" \
   --query properties.outputs.fqdn.value \
   --output tsv)
+
+if [ $? -ne 0 ]; then
+    echo "Deployment error. Please check the deployment logs in the Azure portal."
+    exit 1
+fi
 
 echo "Application has been deployed successfully. You can access it at https://$fqdn"

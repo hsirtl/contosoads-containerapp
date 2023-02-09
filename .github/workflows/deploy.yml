@@ -45,10 +45,18 @@ jobs:
             
             az group create -l ${{ env.LOCATION }} -n ${{ env.RESOURCE_GROUP_NAME }}
 
-      - name: Deploy Bicep template  
+      - name: Deploy Bicep template for Azure KeyVault 
+        uses: azure/arm-deploy@v1
+        with:
+          deploymentName: ${{ github.run_number }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: ./deploy/modules/keyvault.bicep
+          parameters: postgresLogin=${{ env.DB_LOGIN }} postgresLoginPassword=${{ secrets.DB_PWD }}
+
+      - name: Deploy Bicep template for the App and dependencies
         uses: azure/arm-deploy@v1
         with:
           deploymentName: ${{ github.run_number }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./deploy/main.bicep
-          parameters: postgresLogin=${{ env.DB_LOGIN }} postgresLoginPassword=${{ secrets.DB_PWD }} repository=${{ env.REPOSITORY }}
+          parameters: repository=${{ env.REPOSITORY }}

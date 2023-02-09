@@ -7,9 +7,6 @@ param location string
 @description('Specifies the subnet resource ID for the Container App environment.')
 param infrastructureSubnetId string
 
-@description('Specifies the subnet resource ID for the Container App pods.')
-param runtimeSubnetId string
-
 @description('Specifies the name of the Azure Storage account.')
 param storageAccountName string
 
@@ -74,7 +71,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-resource environment 'Microsoft.App/managedEnvironments@2022-01-01-preview' = {
+resource environment 'Microsoft.App/managedEnvironments@2022-03-01' = {
   name: environmentName
   location: location
   properties: {
@@ -87,12 +84,11 @@ resource environment 'Microsoft.App/managedEnvironments@2022-01-01-preview' = {
     }
     vnetConfiguration: {
       infrastructureSubnetId: infrastructureSubnetId
-      runtimeSubnetId: runtimeSubnetId
     }
   }
 }
 
-resource imageStoreComponent 'Microsoft.App/managedEnvironments/daprComponents@2022-01-01-preview' = {
+resource imageStoreComponent 'Microsoft.App/managedEnvironments/daprComponents@2022-03-01' = {
   name: 'image-store'
   parent: environment
   properties: {
@@ -125,7 +121,7 @@ resource imageStoreComponent 'Microsoft.App/managedEnvironments/daprComponents@2
   }
 }
 
-resource requestQueueComponent 'Microsoft.App/managedEnvironments/daprComponents@2022-01-01-preview' = {
+resource requestQueueComponent 'Microsoft.App/managedEnvironments/daprComponents@2022-03-01' = {
   name: 'thumbnail-request'
   parent: environment
   properties: {
@@ -154,7 +150,7 @@ resource requestQueueComponent 'Microsoft.App/managedEnvironments/daprComponents
   }
 }
 
-resource resultQueueComponent 'Microsoft.App/managedEnvironments/daprComponents@2022-01-01-preview' = {
+resource resultQueueComponent 'Microsoft.App/managedEnvironments/daprComponents@2022-03-01' = {
   name: 'thumbnail-result'
   parent: environment
   properties: {
@@ -185,4 +181,3 @@ resource resultQueueComponent 'Microsoft.App/managedEnvironments/daprComponents@
 
 output aiConnectionString string = appInsights.properties.ConnectionString
 output environmentId string = environment.id
-
