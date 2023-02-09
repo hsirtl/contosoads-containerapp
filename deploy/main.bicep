@@ -15,14 +15,6 @@ param requestQueueName string = 'thumbnail-request'
 @description('Specifies the name of the result queue.')
 param resultQueueName string = 'thumbnail-result'
 
-@description('Specifies the PostgreSQL login name.')
-@secure()
-param postgresLogin string
-
-@description('Specifies the PostgreSQL login password.')
-@secure()
-param postgresLoginPassword string
-
 @description('Specifies the PostgreSQL version.')
 param postgresVersion string = '14'
 
@@ -36,10 +28,15 @@ param imageProcessorTag string = 'stable'
 param repository string
 
 var vnetName = '${baseName}-vnet'
+var keyVaultName = '${baseName}${uniqueString(resourceGroup().id)}'
 var storageAccountName = '${baseName}${uniqueString(resourceGroup().id)}'
 var privateDnsZoneName = '${baseName}.postgres.database.azure.com'
 var postgresHostName = 'server${uniqueString(resourceGroup().id)}'
 var databaseName = 'contosoads'
+
+resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
+  name: keyVaultName
+}
 
 module network 'modules/network.bicep' = {
   name: 'network'
@@ -72,14 +69,12 @@ module postgres 'modules/database.bicep' = {
     postgresSubnetId: network.outputs.pgSubnetId
     aciSubnetId: network.outputs.aciSubnetId
     privateDnsZoneId: network.outputs.privateDnsZoneId
-    administratorLogin: postgresLogin
-    administratorLoginPassword: postgresLoginPassword
+    administratorLogin: keyVault.getSecret('postgresLogin')
+    administratorLoginPassword: keyVault.getSecret('postgresLoginPassword')
     version: postgresVersion
     repository: repository
   }
 }
-
-var dbConnectionString = 'Host=${postgresHostName}.postgres.database.azure.com;Database=${databaseName};Username=${postgresLogin};Password=${postgresLoginPassword}'
 
 module webapp 'modules/webapp.bicep' = {
   name: 'webapp'
@@ -87,7 +82,10 @@ module webapp 'modules/webapp.bicep' = {
     location: location
     tag: webAppTag
     environmentId: environment.outputs.environmentId
-    dbConnectionString: dbConnectionString
+    postgresHostName: postgresHostName
+    databaseName: databaseName
+    postgresLogin: keyVault.getSecret('postgresLogin')
+    postgresLoginPassword: keyVault.getSecret('postgresLoginPassword')
     aiConnectionString: environment.outputs.aiConnectionString
   }
   dependsOn: [ postgres ]

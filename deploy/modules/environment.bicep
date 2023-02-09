@@ -181,4 +181,3 @@ resource resultQueueComponent 'Microsoft.App/managedEnvironments/daprComponents@
 
 output aiConnectionString string = appInsights.properties.ConnectionString
 output environmentId string = environment.id
-

@@ -12,8 +12,8 @@ on:
       - '.github/workflows/**'
 
 env:
-    # Specify your resource group's name
-    RESOURCE_GROUP_NAME: contosoads
+    # Specify your resource group's name (changed)
+    RESOURCE_GROUP_NAME: contosoadsrg
 
     # Specify your preferred region
     LOCATION: northeurope
@@ -22,7 +22,7 @@ env:
     DB_LOGIN: contosoads
     
     # Specify your GitHub repo to source the DB migration script from (must be public)
-    REPOSITORY: 'https://github.com/joergjo/contosoads-containerapp.git'
+    REPOSITORY: 'https://github.com/hsirtl/contosoads-containerapp.git'
 
 jobs:
   deploy:
@@ -45,10 +45,18 @@ jobs:
             
             az group create -l ${{ env.LOCATION }} -n ${{ env.RESOURCE_GROUP_NAME }}
 
-      - name: Deploy Bicep template  
+      - name: Deploy Bicep template for Azure KeyVault 
+        uses: azure/arm-deploy@v1
+        with:
+          deploymentName: ${{ github.run_number }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: ./deploy/modules/keyvault.bicep
+          parameters: postgresLogin=${{ env.DB_LOGIN }} postgresLoginPassword=${{ secrets.DB_PWD }}
+
+      - name: Deploy Bicep template for the App and dependencies
         uses: azure/arm-deploy@v1
         with:
           deploymentName: ${{ github.run_number }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./deploy/main.bicep
-          parameters: postgresLogin=${{ env.DB_LOGIN }} postgresLoginPassword=${{ secrets.DB_PWD }} repository=${{ env.REPOSITORY }}
+          parameters: repository=${{ env.REPOSITORY }}

@@ -7,11 +7,24 @@ param location string
 @description('Specifies the name of Azure Container Apps environment to deploy to.')
 param environmentId string
 
-@description('Specifies the connection string for the ContosoAds PostgreSQL database.')
-param dbConnectionString string
+@description('Specifies the name of the Azure Database for PostgreSQL server.')
+param postgresHostName string
+
+@description('Specifies the name of the Azure Database for PostgreSQL database.')
+param databaseName string
+
+@description('Specifies the login name of the Azure Database for PostgreSQL server.')
+@secure()
+param postgresLogin string
+
+@description('Specifies the login password of the Azure Database for PostgreSQL server.')
+@secure()
+param postgresLoginPassword string
 
 @description('Specifies the Application Insights connection string.')
 param aiConnectionString string
+
+var dbConnectionString = 'Host=${postgresHostName}.postgres.database.azure.com;Database=${databaseName};Username=${postgresLogin};Password=${postgresLoginPassword}'
 
 var secrets = [
   {
