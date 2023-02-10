@@ -49,7 +49,7 @@ resource acrPullLogin 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   parent: keyVault
   name: 'acrPullLogin'
   properties: {
-    value: managedIdentity.properties.principalId
+    value: managedIdentity.id
   }
 }
 
