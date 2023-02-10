@@ -42,7 +42,7 @@ jobs:
             ${{ secrets.REGISTRY_NAME }}.azurecr.io/contosoads-web
           tags: |
             type=ref,event=tag
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=latest
             type=sha
             
       - name: Define Docker meta data for ContosoAds.ImageProcessor 
@@ -53,7 +53,7 @@ jobs:
             ${{ secrets.REGISTRY_NAME }}.azurecr.io/contosoads-imageprocessor
           tags: |
             type=ref,event=tag
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=latest
             type=sha
 
       - name: 'Docker Login'
