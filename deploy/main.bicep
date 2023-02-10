@@ -82,6 +82,7 @@ module webapp 'modules/webapp.bicep' = {
   params: {
     location: location
     registryName: acrName
+    registryLogin: keyVault.getSecret('acrLogin')
     tag: webAppTag
     environmentId: environment.outputs.environmentId
     postgresHostName: postgresHostName

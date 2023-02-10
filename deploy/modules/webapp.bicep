@@ -1,6 +1,10 @@
 @description('Specifies the registry of the ContosoAds web application container.')
 param registryName string
 
+@description('Specifies the managed identity to be used for accessing the registry.')
+@secure()
+param registryLogin string
+
 @description('Specifies the tag of the ContosoAds web application container.')
 param tag string
 
@@ -46,7 +50,10 @@ resource containerApp 'Microsoft.App/containerApps@2022-03-01' = {
   name: 'contosoads-web'
   location: location
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${registryLogin}': {}
+    }
   }
   properties: {
     managedEnvironmentId: environmentId
