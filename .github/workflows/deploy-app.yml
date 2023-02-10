@@ -1,15 +1,13 @@
 name: Deploy ContosoAds to Azure Container Apps
 concurrency: contosoads-${{ github.ref }}
 
-on:    
-  push:
-    branches:
-      - deploy
-    paths:
-      - 'components/**'
-      - 'deploy/**'
-      - 'src/**'
-      - '.github/workflows/**'
+#on:    
+#  push:
+#    branches:
+#      - deploy
+#    paths:
+#      - 'src/**'
+#     - '.github/workflows/deploy-app.yml'
 
 env:
     # Specify your resource group's name (changed)
