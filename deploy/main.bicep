@@ -82,7 +82,7 @@ module webapp 'modules/webapp.bicep' = {
   params: {
     location: location
     registryName: acrName
-    registryLogin: keyVault.getSecret('acrLogin')
+    registryLogin: keyVault.getSecret('acrPullLogin')
     tag: webAppTag
     environmentId: environment.outputs.environmentId
     postgresHostName: postgresHostName
@@ -99,7 +99,7 @@ module imageprocessor 'modules/imageprocessor.bicep' = {
   params: {
     location: location
     registryName: acrName
-    registryLogin: keyVault.getSecret('acrLogin')
+    registryLogin: keyVault.getSecret('acrPullLogin')
     tag: imageProcessorTag
     environmentId: environment.outputs.environmentId
     aiConnectionString: environment.outputs.aiConnectionString
