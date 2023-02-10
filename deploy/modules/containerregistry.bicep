@@ -55,3 +55,6 @@ resource acrPullLogin 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
 
 @description('Output the login server property for later use')
 output loginServer string = acrResource.properties.loginServer
+
+@description('Output the resource ID for later use')
+output acrName string = acrResource.name

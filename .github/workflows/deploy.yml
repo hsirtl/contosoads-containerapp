@@ -53,12 +53,54 @@ jobs:
           template: ./deploy/modules/keyvault.bicep
           parameters: postgresLogin=${{ env.DB_LOGIN }} postgresLoginPassword=${{ secrets.DB_PWD }}
 
-      - name: Deploy Bicep template for Azure Container Registry 
+      - name: Deploy Bicep template for Azure Container Registry
+        id: acr
         uses: azure/arm-deploy@v1
         with:
           deploymentName: ${{ github.run_number }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./deploy/modules/containerregistry.bicep
+
+      - name: Define Docker meta data for ContosoAds.Web
+        id: meta-web
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ steps.acr.outputs.acrName }}/contosoads-web
+          tags: |
+            type=ref,event=tag
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha
+            
+      - name: Define Docker meta data for ContosoAds.ImageProcessor 
+        id: meta-imageprocessor
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ steps.acr.outputs.acrName }}/contosoads-imageprocessor
+          tags: |
+            type=ref,event=tag
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha
+          
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Build and push ContosoAds.Web
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/ContosoAds.Web
+          push: true
+          tags: ${{ steps.meta-web.outputs.tags }}
+          labels: ${{ steps.meta-web.outputs.labels }}   
+          
+      - name: Build and push ContosoAds.ImageProcessor
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/ContosoAds.ImageProcessor
+          push: true
+          tags: ${{ steps.meta-imageprocessor.outputs.tags }}
+          labels: ${{ steps.meta-imageprocessor.outputs.labels }}
 
       - name: Deploy Bicep template for the App and dependencies
         uses: azure/arm-deploy@v1
