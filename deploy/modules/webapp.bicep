@@ -45,6 +45,9 @@ var containerPort = 8080
 resource containerApp 'Microsoft.App/containerApps@2022-03-01' = {
   name: 'contosoads-web'
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     managedEnvironmentId: environmentId
     configuration: {
