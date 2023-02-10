@@ -59,6 +59,12 @@ resource containerApp 'Microsoft.App/containerApps@2022-03-01' = {
     managedEnvironmentId: environmentId
     configuration: {
       secrets: secrets
+      registries: [
+        {
+          identity: registryLogin
+          server: '${registryName}.azurecr.io'
+        }
+      ]
       ingress: {
         external: true
         targetPort: containerPort
