@@ -39,7 +39,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ${{ steps.acr.outputs.acrName }}/contosoads-web
+            ${{ secrets.REGISTRY_NAME }}/contosoads-web
           tags: |
             type=ref,event=tag
             type=raw,value=latest,enable={{is_default_branch}}
@@ -50,7 +50,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ${{ steps.acr.outputs.acrName }}/contosoads-imageprocessor
+            ${{ secrets.REGISTRY_NAME }}/contosoads-imageprocessor
           tags: |
             type=ref,event=tag
             type=raw,value=latest,enable={{is_default_branch}}
@@ -59,7 +59,7 @@ jobs:
       - name: 'Docker Login'
         uses: azure/docker-login@v1
         with:
-          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          login-server: ${{ secrets.REGISTRY_NAME }}
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
