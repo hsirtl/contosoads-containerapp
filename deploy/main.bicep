@@ -99,6 +99,7 @@ module imageprocessor 'modules/imageprocessor.bicep' = {
   params: {
     location: location
     registryName: acrName
+    registryLogin: keyVault.getSecret('acrLogin')
     tag: imageProcessorTag
     environmentId: environment.outputs.environmentId
     aiConnectionString: environment.outputs.aiConnectionString

@@ -1,6 +1,10 @@
 @description('Specifies the registry of the ContosoAds web application container.')
 param registryName string
 
+@description('Specifies the managed identity to be used for accessing the registry.')
+@secure()
+param registryLogin string
+
 @description('Specifies the tag of the ContosoAds image processor container.')
 param tag string
 
@@ -25,6 +29,12 @@ var containerPort = 8081
 resource imageProcessor 'Microsoft.App/containerApps@2022-03-01' = {
   name: 'contosoads-imageprocessor'
   location: location
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${registryLogin}': {}
+    }
+  }
   properties: {
     managedEnvironmentId: environmentId
     configuration: {
