@@ -10,6 +10,8 @@ var acrName = '${baseName}${uniqueString(resourceGroup().id)}'
 var keyVaultName = '${baseName}${uniqueString(resourceGroup().id)}'
 var managedIdentityName = '${baseName}${uniqueString(resourceGroup().id)}'
 
+var acrPullRole = resourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
+
 @description('Provide a tier of your Azure Container Registry.')
 param acrSku string = 'Standard'
 
@@ -37,7 +39,7 @@ resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-
 resource acrPullRoleAssignment 'Microsoft.Authorization/roleAssignments@2021-04-01-preview' = {
   name: guid(resourceGroup().id, acrResource.id, 'acrPullRoleAssignment')
   properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'acdd72a7-3385-48ef-bd42-f606fba81ae7')
+    roleDefinitionId: acrPullRole
     principalId: managedIdentity.properties.principalId
     principalType: 'ServicePrincipal'
   }
@@ -47,7 +49,7 @@ resource acrPullLogin 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
   parent: keyVault
   name: 'acrPullLogin'
   properties: {
-    value: managedIdentity.properties.principalId
+    value: managedIdentity.id
   }
 }
 
