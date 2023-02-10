@@ -78,7 +78,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-03-01' = {
     template: {
       containers: [
         {
-          image: '${registryName}/contosoads-web:${tag}'
+          image: '${registryName}.azurecr.io/contosoads-web:${tag}'
           name: 'contosoads-webapp'
           env: [
             {

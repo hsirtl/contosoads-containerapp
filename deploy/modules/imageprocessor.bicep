@@ -49,7 +49,7 @@ resource imageProcessor 'Microsoft.App/containerApps@2022-03-01' = {
     template: {
       containers: [
         {
-          image: '${registryName}/contosoads-imageprocessor:${tag}'
+          image: '${registryName}.azurecr.io/contosoads-imageprocessor:${tag}'
           name: 'contosoads-imageprocessor'
           env: [
             {
