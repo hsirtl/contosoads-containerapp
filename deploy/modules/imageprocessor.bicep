@@ -39,6 +39,12 @@ resource imageProcessor 'Microsoft.App/containerApps@2022-03-01' = {
     managedEnvironmentId: environmentId
     configuration: {
       secrets: secrets
+      registries: [
+        {
+          identity: registryLogin
+          server: '${registryName}.azurecr.io'
+        }
+      ]
       dapr: {
         enabled: true
         appId: 'contosoads-imageprocessor'
