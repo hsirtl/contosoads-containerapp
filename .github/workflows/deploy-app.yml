@@ -44,6 +44,17 @@ jobs:
             type=ref,event=tag
             type=raw,value=latest
             type=sha
+
+      - name: Define Docker meta data for ContosoAds.Api
+        id: meta-api
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ secrets.REGISTRY_NAME }}.azurecr.io/contosoads-api
+          tags: |
+            type=ref,event=tag
+            type=raw,value=latest
+            type=sha
             
       - name: Define Docker meta data for ContosoAds.ImageProcessor 
         id: meta-imageprocessor
@@ -74,6 +85,14 @@ jobs:
           tags: ${{ steps.meta-web.outputs.tags }}
           labels: ${{ steps.meta-web.outputs.labels }}   
           
+      - name: Build and push ContosoAds.Api
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/ContosoAds.Api
+          push: true
+          tags: ${{ steps.meta-api.outputs.tags }}
+          labels: ${{ steps.meta-api.outputs.labels }}   
+
       - name: Build and push ContosoAds.ImageProcessor
         uses: docker/build-push-action@v3
         with:

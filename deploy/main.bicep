@@ -21,6 +21,9 @@ param postgresVersion string = '14'
 @description('Specifies the tag for the contosoads-web image.')
 param webAppTag string = 'latest'
 
+@description('Specifies the tag for the contosoads-api image.')
+param webApiTag string = 'latest'
+
 @description('Specifies the tag for the contosoads-imageprocessor image.')
 param imageProcessorTag string = 'latest'
 
@@ -84,6 +87,23 @@ module webapp 'modules/webapp.bicep' = {
     registryName: acrName
     registryLogin: keyVault.getSecret('acrPullLogin')
     tag: webAppTag
+    environmentId: environment.outputs.environmentId
+    postgresHostName: postgresHostName
+    databaseName: databaseName
+    postgresLogin: keyVault.getSecret('postgresLogin')
+    postgresLoginPassword: keyVault.getSecret('postgresLoginPassword')
+    aiConnectionString: environment.outputs.aiConnectionString
+  }
+  dependsOn: [ postgres ]
+}
+
+module webapi 'modules/webapi.bicep' = {
+  name: 'webapi'
+  params: {
+    location: location
+    registryName: acrName
+    registryLogin: keyVault.getSecret('acrPullLogin')
+    tag: webApiTag
     environmentId: environment.outputs.environmentId
     postgresHostName: postgresHostName
     databaseName: databaseName
