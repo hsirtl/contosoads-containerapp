@@ -6,14 +6,14 @@ param location string = resourceGroup().location
 @maxLength(12)
 param baseName string = 'contosoads'
 
-@description('Specifies the name of the blob container.')
-param containerName string = 'images'
+//@description('Specifies the name of the blob container.')
+//param containerName string = 'images'
 
-@description('Specifies the name of the request queue.')
-param requestQueueName string = 'thumbnail-request'
+//@description('Specifies the name of the request queue.')
+//param requestQueueName string = 'thumbnail-request'
 
-@description('Specifies the name of the result queue.')
-param resultQueueName string = 'thumbnail-result'
+//@description('Specifies the name of the result queue.')
+//param resultQueueName string = 'thumbnail-result'
 
 @description('Specifies the PostgreSQL version.')
 param postgresVersion string = '14'
@@ -33,7 +33,7 @@ param repository string
 var vnetName = '${baseName}-vnet'
 var keyVaultName = '${baseName}${uniqueString(resourceGroup().id)}'
 var acrName = '${baseName}${uniqueString(resourceGroup().id)}'
-var storageAccountName = '${baseName}${uniqueString(resourceGroup().id)}'
+//var storageAccountName = '${baseName}${uniqueString(resourceGroup().id)}'
 var privateDnsZoneName = '${baseName}.postgres.database.azure.com'
 var postgresHostName = 'server${uniqueString(resourceGroup().id)}'
 var databaseName = 'contosoads'
@@ -56,7 +56,7 @@ resource environment 'Microsoft.App/managedEnvironments@2022-03-01' existing = {
 }
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
-  name: 'appInsights'
+  name: '${baseName}-insights'
 }
 
 /*
