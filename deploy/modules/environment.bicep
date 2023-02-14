@@ -12,13 +12,13 @@ param storageAccountName string
 
 @description('Specifies the name of the blob container for images and thumbnails.')
 param containerName string
-
+/*
 @description('Specifies the name of the request queue.')
 param requestQueueName string
 
 @description('Specifies the name of the result queue.')
 param resultQueueName string
-
+*/
 var workspaceName = '${baseName}-logs'
 var appInsightsName = '${baseName}-insights'
 var environmentName = '${baseName}-env'
@@ -43,13 +43,13 @@ resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@20
   }
 }
 
-resource requestQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2021-08-01' = {
+/*resource requestQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2021-08-01' = {
   name: '${storageAccount.name}/default/${requestQueueName}'
 }
 
 resource resultQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2021-08-01' = {
   name: '${storageAccount.name}/default/${resultQueueName}'
-}
+}*/
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: workspaceName
@@ -88,7 +88,7 @@ resource environment 'Microsoft.App/managedEnvironments@2022-03-01' = {
   }
 }
 
-resource imageStoreComponent 'Microsoft.App/managedEnvironments/daprComponents@2022-03-01' = {
+/*resource imageStoreComponent 'Microsoft.App/managedEnvironments/daprComponents@2022-03-01' = {
   name: 'image-store'
   parent: environment
   properties: {
@@ -119,9 +119,9 @@ resource imageStoreComponent 'Microsoft.App/managedEnvironments/daprComponents@2
       }
     ] 
   }
-}
+}*/
 
-resource requestQueueComponent 'Microsoft.App/managedEnvironments/daprComponents@2022-03-01' = {
+/*resource requestQueueComponent 'Microsoft.App/managedEnvironments/daprComponents@2022-03-01' = {
   name: 'thumbnail-request'
   parent: environment
   properties: {
@@ -148,9 +148,9 @@ resource requestQueueComponent 'Microsoft.App/managedEnvironments/daprComponents
       }
     ] 
   }
-}
+}*/
 
-resource resultQueueComponent 'Microsoft.App/managedEnvironments/daprComponents@2022-03-01' = {
+/*resource resultQueueComponent 'Microsoft.App/managedEnvironments/daprComponents@2022-03-01' = {
   name: 'thumbnail-result'
   parent: environment
   properties: {
@@ -177,7 +177,7 @@ resource resultQueueComponent 'Microsoft.App/managedEnvironments/daprComponents@
       }
     ] 
   }
-}
+}*/
 
 output aiConnectionString string = appInsights.properties.ConnectionString
 output environmentId string = environment.id
