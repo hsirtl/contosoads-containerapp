@@ -59,8 +59,8 @@ module environment 'modules/environment.bicep' = {
     infrastructureSubnetId: network.outputs.infraSubnetId
     storageAccountName: storageAccountName
     containerName: containerName
-    requestQueueName: requestQueueName
-    resultQueueName: resultQueueName
+    //requestQueueName: requestQueueName
+    //resultQueueName: resultQueueName
   }
 }
 
