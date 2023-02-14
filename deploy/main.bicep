@@ -52,7 +52,7 @@ module network 'modules/network.bicep' = {
 }
 
 resource environment 'Microsoft.App/managedEnvironments@2022-03-01' existing = {
-  name: 'environment'
+  name: '${baseName}-env'
 }
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
