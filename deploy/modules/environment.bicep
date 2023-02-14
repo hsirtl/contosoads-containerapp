@@ -115,7 +115,7 @@ resource imageStoreComponent 'Microsoft.App/managedEnvironments/daprComponents@2
     secrets: [
       {
         name: 'storage-key'
-        value: listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value
+        value: storageAccount.listKeys().keys[0].value
       }
     ] 
   }

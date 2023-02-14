@@ -51,6 +51,15 @@ module network 'modules/network.bicep' = {
   }
 }
 
+resource environment 'Microsoft.App/managedEnvironments@2022-03-01' existing = {
+  name: 'environment'
+}
+
+resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
+  name: 'appInsights'
+}
+
+/*
 module environment 'modules/environment.bicep' = {
   name: 'environment'
   params: {
@@ -63,6 +72,7 @@ module environment 'modules/environment.bicep' = {
     resultQueueName: resultQueueName
   }
 }
+*/
 
 module postgres 'modules/database.bicep' = {
   name: 'postgres'
@@ -87,12 +97,12 @@ module webapp 'modules/webapp.bicep' = {
     registryName: acrName
     registryLogin: keyVault.getSecret('acrPullLogin')
     tag: webAppTag
-    environmentId: environment.outputs.environmentId
+    environmentId: environment.id
     postgresHostName: postgresHostName
     databaseName: databaseName
     postgresLogin: keyVault.getSecret('postgresLogin')
     postgresLoginPassword: keyVault.getSecret('postgresLoginPassword')
-    aiConnectionString: environment.outputs.aiConnectionString
+    aiConnectionString: appInsights.properties.ConnectionString
   }
   dependsOn: [ postgres ]
 }
@@ -104,12 +114,12 @@ module webapi 'modules/webapi.bicep' = {
     registryName: acrName
     registryLogin: keyVault.getSecret('acrPullLogin')
     tag: webApiTag
-    environmentId: environment.outputs.environmentId
+    environmentId: environment.id
     postgresHostName: postgresHostName
     databaseName: databaseName
     postgresLogin: keyVault.getSecret('postgresLogin')
     postgresLoginPassword: keyVault.getSecret('postgresLoginPassword')
-    aiConnectionString: environment.outputs.aiConnectionString
+    aiConnectionString: appInsights.properties.ConnectionString
   }
   dependsOn: [ postgres ]
 }
@@ -121,8 +131,8 @@ module imageprocessor 'modules/imageprocessor.bicep' = {
     registryName: acrName
     registryLogin: keyVault.getSecret('acrPullLogin')
     tag: imageProcessorTag
-    environmentId: environment.outputs.environmentId
-    aiConnectionString: environment.outputs.aiConnectionString
+    environmentId: environment.id
+    aiConnectionString: appInsights.properties.ConnectionString
   }
   dependsOn: [ postgres ]
 }
