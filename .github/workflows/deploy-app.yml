@@ -10,7 +10,7 @@ on:
       - '.github/workflows/deploy-app.yml'
 
 env:
-    # Specify your resource group's name
+    # Specify your resource group's name (change)
     RESOURCE_GROUP_NAME: contosoadsrg
 
     # Specify your preferred region
