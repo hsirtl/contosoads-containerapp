@@ -107,4 +107,4 @@ jobs:
           deploymentName: ${{ github.run_number }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./deploy/main.bicep
-          parameters: repository=${{ env.REPOSITORY }}
+          parameters: repository=${{ env.REPOSITORY }} webAppTag=${{ github.sha }} webApiTag=${{ github.sha }} imageProcessorTag=${{ github.sha }}
