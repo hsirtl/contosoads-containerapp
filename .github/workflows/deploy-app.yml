@@ -26,6 +26,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Define variables
+        run: |
+          git rev-parse --short HEAD > SHORT_COMMIT_HASH
+          echo "sha-$(cat DKR_HUB_URL)" > TAG_SHORT_COMMIT_HASH
+
       - name: Checkout branch 
         uses: actions/checkout@v3
         
@@ -107,4 +112,4 @@ jobs:
           deploymentName: ${{ github.run_number }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./deploy/main.bicep
-          parameters: repository=${{ env.REPOSITORY }} webAppTag=${{ github.sha }} webApiTag=${{ github.sha }} imageProcessorTag=${{ github.sha }}
+          parameters: repository=${{ env.REPOSITORY }} webAppTag=${{ TAG_SHORT_COMMIT_HASH }} webApiTag=${{ TAG_SHORT_COMMIT_HASH }} imageProcessorTag=${{ TAG_SHORT_COMMIT_HASH }}
