@@ -30,9 +30,8 @@ jobs:
         uses: actions/checkout@v3
         
       - name: Define variables
-        run: |
-          git rev-parse --short HEAD > SHORT_COMMIT_HASH
-          echo "sha-$(cat DKR_HUB_URL)" > TAG_SHORT_COMMIT_HASH
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Login to Azure
         uses: azure/login@v1
@@ -112,4 +111,4 @@ jobs:
           deploymentName: ${{ github.run_number }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./deploy/main.bicep
-          parameters: repository=${{ env.REPOSITORY }} webAppTag=${{ TAG_SHORT_COMMIT_HASH }} webApiTag=${{ TAG_SHORT_COMMIT_HASH }} imageProcessorTag=${{ TAG_SHORT_COMMIT_HASH }}
+          parameters: repository=${{ env.REPOSITORY }} webAppTag="sha-${{ steps.vars.outputs.sha_short }}" webApiTag="sha-${{ steps.vars.outputs.sha_short }}" imageProcessorTag="sha-${{ steps.vars.outputs.sha_short }}"
