@@ -26,14 +26,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout branch 
+        uses: actions/checkout@v3
+        
       - name: Define variables
         run: |
           git rev-parse --short HEAD > SHORT_COMMIT_HASH
           echo "sha-$(cat DKR_HUB_URL)" > TAG_SHORT_COMMIT_HASH
 
-      - name: Checkout branch 
-        uses: actions/checkout@v3
-        
       - name: Login to Azure
         uses: azure/login@v1
         with:
