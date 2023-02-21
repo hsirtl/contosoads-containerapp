@@ -51,6 +51,20 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
           ]
         }
       }
+      {
+        name: 'apim-delegated'
+        properties: {
+          addressPrefix: '10.150.10.0/29'
+          delegations: [
+            {
+              name: 'Microsoft.ApiManagement/service'
+              properties: {
+                serviceName: 'Microsoft.ApiManagement/service'
+              }
+            }
+          ]
+        }
+      }
     ]
   }
 }
@@ -76,4 +90,5 @@ output vnetId string = vnet.id
 output infraSubnetId string = vnet.properties.subnets[0].id
 output pgSubnetId string = vnet.properties.subnets[1].id
 output aciSubnetId string = vnet.properties.subnets[2].id
+output apimSubnetId string = vnet.properties.subnets[3].id
 output privateDnsZoneId string = privateDnsZone.id
