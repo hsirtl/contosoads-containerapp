@@ -19,16 +19,20 @@ param resultQueueName string = 'thumbnail-result'
 param postgresVersion string = '14'
 
 @description('Specifies the tag for the contosoads-web image.')
-param webAppTag string = 'stable'
+param webAppTag string = 'latest'
+
+@description('Specifies the tag for the contosoads-api image.')
+param webApiTag string = 'latest'
 
 @description('Specifies the tag for the contosoads-imageprocessor image.')
-param imageProcessorTag string = 'stable'
+param imageProcessorTag string = 'latest'
 
 @description('Specifies the public Git repo that hosts the database migration script.')
 param repository string
 
 var vnetName = '${baseName}-vnet'
 var keyVaultName = '${baseName}${uniqueString(resourceGroup().id)}'
+var acrName = '${baseName}${uniqueString(resourceGroup().id)}'
 var storageAccountName = '${baseName}${uniqueString(resourceGroup().id)}'
 var privateDnsZoneName = '${baseName}.postgres.database.azure.com'
 var postgresHostName = 'server${uniqueString(resourceGroup().id)}'
@@ -80,7 +84,26 @@ module webapp 'modules/webapp.bicep' = {
   name: 'webapp'
   params: {
     location: location
+    registryName: acrName
+    registryLogin: keyVault.getSecret('acrPullLogin')
     tag: webAppTag
+    environmentId: environment.outputs.environmentId
+    postgresHostName: postgresHostName
+    databaseName: databaseName
+    postgresLogin: keyVault.getSecret('postgresLogin')
+    postgresLoginPassword: keyVault.getSecret('postgresLoginPassword')
+    aiConnectionString: environment.outputs.aiConnectionString
+  }
+  dependsOn: [ postgres ]
+}
+
+module webapi 'modules/webapi.bicep' = {
+  name: 'webapi'
+  params: {
+    location: location
+    registryName: acrName
+    registryLogin: keyVault.getSecret('acrPullLogin')
+    tag: webApiTag
     environmentId: environment.outputs.environmentId
     postgresHostName: postgresHostName
     databaseName: databaseName
@@ -95,6 +118,8 @@ module imageprocessor 'modules/imageprocessor.bicep' = {
   name: 'imageprocessor'
   params: {
     location: location
+    registryName: acrName
+    registryLogin: keyVault.getSecret('acrPullLogin')
     tag: imageProcessorTag
     environmentId: environment.outputs.environmentId
     aiConnectionString: environment.outputs.aiConnectionString

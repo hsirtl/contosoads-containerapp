@@ -33,8 +33,10 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   properties: {
     accessTier: 'Hot'
     minimumTlsVersion: 'TLS1_2'
+    allowBlobPublicAccess: true
   }
 }
+
 
 resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-08-01' = {
   name: '${storageAccount.name}/default/${containerName}'
@@ -42,6 +44,7 @@ resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@20
     publicAccess: 'Blob'
   }
 }
+
 
 resource requestQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2021-08-01' = {
   name: '${storageAccount.name}/default/${requestQueueName}'
@@ -77,10 +80,11 @@ resource environment 'Microsoft.App/managedEnvironments@2022-03-01' = {
   properties: {
     appLogsConfiguration: {
       destination: 'log-analytics'
-      logAnalyticsConfiguration: {
+        logAnalyticsConfiguration: {
         customerId: logAnalyticsWorkspace.properties.customerId
         sharedKey: logAnalyticsWorkspace.listKeys().primarySharedKey
       }
+      
     }
     vnetConfiguration: {
       infrastructureSubnetId: infrastructureSubnetId
