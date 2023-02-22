@@ -1,5 +1,6 @@
 using ContosoAds.Api;
 using ContosoAds.Api.DataAccess;
+using ContosoAds.Api.Model;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +41,53 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Get all ads
 app.MapGet("/ads", async (AdsContext db) =>
     await db.Ads.ToListAsync());
+
+// Get one specific ad
+app.MapGet("/ads/{id}", async (int id, AdsContext db) =>
+    await db.Ads.FindAsync(id)
+        is Ad ad
+            ? Results.Ok(ad)
+            : Results.NotFound());
+
+// Create a new ad
+app.MapPost("/ads", async (Ad ad, AdsContext db) =>
+{
+    db.Ads.Add(ad);
+    await db.SaveChangesAsync();
+
+    return Results.Created($"/ads/{ad.Id}", ad);
+});
+
+// Change an ad
+app.MapPut("/ads/{id}", async (int id, Ad inputAd, AdsContext db) =>
+{
+    var ad = await db.Ads.FindAsync(id);
+
+    if (ad is null) return Results.NotFound();
+
+    ad.Title = inputAd.Title;
+    ad.Description = inputAd.Description;
+    ad.Phone = inputAd.Phone;
+
+    await db.SaveChangesAsync();
+
+    return Results.NoContent();
+});
+
+// Delete an ad
+app.MapDelete("/ads/{id}", async (int id, AdsContext db) =>
+{
+    if (await db.Ads.FindAsync(id) is Ad ad)
+    {
+        db.Ads.Remove(ad);
+        await db.SaveChangesAsync();
+        return Results.Ok(ad);
+    }
+
+    return Results.NotFound();
+});
 
 app.Run();
