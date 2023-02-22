@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "apiRevision": "1",
+    "authenticationSettings": {},
+    "description": "",
+    "displayName": "Contoso Ads",
+    "isCurrent": true,
+    "path": "contoso",
+    "protocols": [
+      "https"
+    ],
+    "serviceUrl": "https://contosoads-api.proudsea-bdd14fdf.northeurope.azurecontainerapps.io",
+    "subscriptionKeyParameterNames": {
+      "header": "Ocp-Apim-Subscription-Key",
+      "query": "subscription-key"
+    },
+    "subscriptionRequired": false
+  }
+}

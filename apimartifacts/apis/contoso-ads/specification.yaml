@@ -1,0 +1,98 @@
+openapi: 3.0.1
+info:
+  title: Contoso Ads
+  description: ''
+  version: '1.0'
+servers:
+  - url: https://contosoads-apim.azure-api.net/contoso
+paths:
+  /ads:
+    get:
+      summary: GetAds
+      operationId: getads
+      responses:
+        '200':
+          description: 
+    post:
+      summary: CreateAd
+      operationId: createad
+      requestBody:
+        description: Ad object.
+        content:
+          application/json:
+            example:
+              title: eee
+              price: 0
+              description: eee
+              imageUri: https://contosoads62kyxdziyd2ge.blob.core.windows.net/images/134ce5ab-051a-416a-af8e-0471a9e448b4.png
+              thumbnailUri: https://contosoads62kyxdziyd2ge.blob.core.windows.net/images/tn-134ce5ab-051a-416a-af8e-0471a9e448b4.png
+              postedDate: '2023-02-14T16:54:30.0323670+00:00'
+              category: 0
+              phone: '333'
+              isNew: false
+      responses:
+        '200':
+          description: 
+  '/ads/{id}':
+    delete:
+      summary: DeleteAd
+      operationId: deletead
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: ''
+      responses:
+        '200':
+          description: 
+    get:
+      summary: GetAd
+      operationId: getad
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: ''
+      responses:
+        '200':
+          description: 
+    put:
+      summary: ChangeAd
+      operationId: changead
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: ''
+      requestBody:
+        content:
+          application/json:
+            example:
+              title: eee
+              price: 0
+              description: eee
+              imageUri: https://contosoads62kyxdziyd2ge.blob.core.windows.net/images/134ce5ab-051a-416a-af8e-0471a9e448b4.png
+              thumbnailUri: https://contosoads62kyxdziyd2ge.blob.core.windows.net/images/tn-134ce5ab-051a-416a-af8e-0471a9e448b4.png
+              postedDate: '2023-02-14T16:54:30.0323670+00:00'
+              category: 0
+              phone: '333'
+              isNew: false
+      responses:
+        '200':
+          description: 
+components:
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: [ ]
+  - apiKeyQuery: [ ]
