@@ -1,7 +1,8 @@
 name: Deploy ContosoAds to Azure Container Apps
 concurrency: contosoads-${{ github.ref }}
 
-on:    
+on:
+  workflow_dispatch:
   push:
     branches:
       - deploy
