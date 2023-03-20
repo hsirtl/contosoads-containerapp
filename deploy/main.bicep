@@ -3,7 +3,7 @@ param location string = resourceGroup().location
 
 @description('Specifies the common name prefix for all resources.')
 @minLength(5)
-@maxLength(12)
+@maxLength(14)
 param baseName string = 'contosoads'
 
 @description('Specifies the name of the blob container.')
@@ -46,7 +46,7 @@ module network 'modules/network.bicep' = {
   name: 'network'
   params: {
     location: location
-    vnetName: vnetName
+    baseName: baseName
     privateDnsZoneName: privateDnsZoneName
   }
 }
@@ -57,7 +57,6 @@ module environment 'modules/environment.bicep' = {
     location: location
     baseName: baseName
     infrastructureSubnetId: network.outputs.infraSubnetId
-    storageAccountName: storageAccountName
     containerName: containerName
     requestQueueName: requestQueueName
     resultQueueName: resultQueueName
@@ -68,7 +67,6 @@ module postgres 'modules/database.bicep' = {
   name: 'postgres'
   params: {
     location: location
-    serverName: postgresHostName
     databaseName: databaseName
     postgresSubnetId: network.outputs.pgSubnetId
     aciSubnetId: network.outputs.aciSubnetId
