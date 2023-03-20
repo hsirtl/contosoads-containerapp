@@ -33,6 +33,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   properties: {
     accessTier: 'Hot'
     minimumTlsVersion: 'TLS1_2'
+    allowBlobPublicAccess: true
   }
 }
 
@@ -54,9 +55,8 @@ resource queueService 'Microsoft.Storage/storageAccounts/queueServices@2022-09-0
   parent: storageAccount
 }
 
-resource requestQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2022-09-01' = {
-  name: requestQueueName
-  parent: queueService
+resource requestQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2021-08-01' = {
+  name: '${storageAccount.name}/default/${requestQueueName}'
 }
 
 resource resultQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2022-09-01' = {
@@ -90,10 +90,11 @@ resource environment 'Microsoft.App/managedEnvironments@2022-03-01' = {
   properties: {
     appLogsConfiguration: {
       destination: 'log-analytics'
-      logAnalyticsConfiguration: {
+        logAnalyticsConfiguration: {
         customerId: logAnalyticsWorkspace.properties.customerId
         sharedKey: logAnalyticsWorkspace.listKeys().primarySharedKey
       }
+      
     }
     vnetConfiguration: {
       infrastructureSubnetId: infrastructureSubnetId
@@ -194,4 +195,3 @@ resource resultQueueComponent 'Microsoft.App/managedEnvironments/daprComponents@
 
 output aiConnectionString string = appInsights.properties.ConnectionString
 output environmentId string = environment.id
-

@@ -69,7 +69,41 @@ services:
     network_mode: "service:webapp"
     depends_on:
       - webapp
-      
+
+  webapi:
+    image: contosoads-api:${API_TAG:-latest}
+    build:
+      context: ./src/ContosoAds.Api
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Database=contosoads;Username=postgres;Password=pass@word1
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Logging__Console__FormatterName=Simple
+      - DAPR_HTTP_PORT=50001
+      - DAPR_GRPC_PORT=50002
+    networks:
+      - contosoads-network
+    depends_on:
+      - db
+  webapi-dapr:
+    image: "daprio/daprd:edge"
+    command: [
+      "./daprd",
+      "-app-id", "contosoads-api",
+      "-app-port", "8081",
+      "-placement-host-address", "placement:50006",
+      "-dapr-http-port", "50001",
+      "-dapr-grpc-port", "50002",
+      "-components-path", "/components"]
+    volumes:
+      - "./components/:/components"
+      - "./src/ContosoAds.Web/secrets.json:/secrets.json"
+    network_mode: "service:webapi"
+    depends_on:
+      - webapi
+
   db:
     image: postgres:${POSTGRES_TAG:-14-alpine}
     volumes:

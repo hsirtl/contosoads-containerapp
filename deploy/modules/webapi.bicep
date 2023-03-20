@@ -46,8 +46,8 @@ var secrets = [
 
 var containerPort = 8080
 
-resource containerApp 'Microsoft.App/containerApps@2022-10-01' = {
-  name: 'contosoads-web'
+resource containerApp 'Microsoft.App/containerApps@2022-03-01' = {
+  name: 'contosoads-api'
   location: location
   identity: {
     type: 'UserAssigned'
@@ -70,7 +70,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-10-01' = {
         targetPort: containerPort
       }
       dapr: {
-        appId: 'contosoads-web'
+        appId: 'contosoads-api'
         appPort: containerPort
         enabled: true
       }
@@ -78,8 +78,8 @@ resource containerApp 'Microsoft.App/containerApps@2022-10-01' = {
     template: {
       containers: [
         {
-          image: '${registryName}.azurecr.io/contosoads-web:${tag}'
-          name: 'contosoads-webapp'
+          image: '${registryName}.azurecr.io/contosoads-api:${tag}'
+          name: 'contosoads-webapi'
           env: [
             {
               name: 'ConnectionStrings__DefaultConnection'

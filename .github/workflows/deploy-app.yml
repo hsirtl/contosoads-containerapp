@@ -1,0 +1,114 @@
+name: Deploy ContosoAds to Azure Container Apps
+concurrency: contosoads-${{ github.ref }}
+
+on:    
+  push:
+    branches:
+      - deploy
+    paths:
+      - 'src/**'
+      - '.github/workflows/deploy-app.yml'
+
+env:
+    # Specify your resource group's name
+    RESOURCE_GROUP_NAME: contosoadsrg
+
+    # Specify your preferred region
+    LOCATION: northeurope
+  
+    # Specify login credentials for PostgreSQL
+    DB_LOGIN: contosoads
+    
+    # Specify your GitHub repo to source the DB migration script from (must be public)
+    REPOSITORY: 'https://github.com/hsirtl/contosoads-containerapp.git'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch 
+        uses: actions/checkout@v3
+        
+      - name: Define variables
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_SPN }}
+
+      - name: Define Docker meta data for ContosoAds.Web
+        id: meta-web
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ secrets.REGISTRY_NAME }}.azurecr.io/contosoads-web
+          tags: |
+            type=ref,event=tag
+            type=raw,value=latest
+            type=sha
+
+      - name: Define Docker meta data for ContosoAds.Api
+        id: meta-api
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ secrets.REGISTRY_NAME }}.azurecr.io/contosoads-api
+          tags: |
+            type=ref,event=tag
+            type=raw,value=latest
+            type=sha
+            
+      - name: Define Docker meta data for ContosoAds.ImageProcessor 
+        id: meta-imageprocessor
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ secrets.REGISTRY_NAME }}.azurecr.io/contosoads-imageprocessor
+          tags: |
+            type=ref,event=tag
+            type=raw,value=latest
+            type=sha
+
+      - name: 'Docker Login'
+        uses: azure/docker-login@v1
+        with:
+          login-server: '${{ secrets.REGISTRY_NAME }}.azurecr.io'
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Build and push ContosoAds.Web
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/ContosoAds.Web
+          push: true
+          tags: ${{ steps.meta-web.outputs.tags }}
+          labels: ${{ steps.meta-web.outputs.labels }}   
+          
+      - name: Build and push ContosoAds.Api
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/ContosoAds.Api
+          push: true
+          tags: ${{ steps.meta-api.outputs.tags }}
+          labels: ${{ steps.meta-api.outputs.labels }}   
+
+      - name: Build and push ContosoAds.ImageProcessor
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/ContosoAds.ImageProcessor
+          push: true
+          tags: ${{ steps.meta-imageprocessor.outputs.tags }}
+          labels: ${{ steps.meta-imageprocessor.outputs.labels }}
+
+      - name: Deploy Bicep template for the App and dependencies
+        uses: azure/arm-deploy@v1
+        with:
+          deploymentName: ${{ github.run_number }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: ./deploy/main.bicep
+          parameters: repository=${{ env.REPOSITORY }} webAppTag="sha-${{ steps.vars.outputs.sha_short }}" webApiTag="sha-${{ steps.vars.outputs.sha_short }}" imageProcessorTag="sha-${{ steps.vars.outputs.sha_short }}"
