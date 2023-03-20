@@ -22,7 +22,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2022-09-01' = {
       {
         name: 'infrastructure'
         properties: {
-          addressPrefix: '10.150.0.0/23'
+          addressPrefix: '10.150.0.0/21'
           networkSecurityGroup: {
             id: networkSecurityGroup.id
           }
@@ -31,7 +31,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2022-09-01' = {
       {
         name: 'postgres-delegated'
         properties: {
-          addressPrefix: '10.150.2.0/24'
+          addressPrefix: '10.150.8.0/24'
           delegations: [
             {
               name: 'Microsoft.DBforPostgreSQL/flexibleServers'
@@ -45,7 +45,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2022-09-01' = {
       {
         name: 'aci-delegated'
         properties: {
-          addressPrefix: '10.150.3.0/24'
+          addressPrefix: '10.150.9.0/24'
           delegations: [
             {
               name: 'Microsoft.ContainerInstance/containerGroups'
@@ -59,7 +59,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2022-09-01' = {
       {
         name: 'apim-delegated'
         properties: {
-          addressPrefix: '10.150.4.0/29'
+          addressPrefix: '10.150.10.0/29'
           delegations: [
             {
               name: 'Microsoft.ApiManagement/service'
