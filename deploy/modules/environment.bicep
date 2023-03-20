@@ -55,8 +55,9 @@ resource queueService 'Microsoft.Storage/storageAccounts/queueServices@2022-09-0
   parent: storageAccount
 }
 
-resource requestQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2021-08-01' = {
-  name: '${storageAccount.name}/default/${requestQueueName}'
+resource requestQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2022-09-01' = {
+  name: requestQueueName
+  parent: queueService
 }
 
 resource resultQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2022-09-01' = {

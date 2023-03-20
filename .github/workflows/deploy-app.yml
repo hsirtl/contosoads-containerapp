@@ -1,7 +1,8 @@
 name: Deploy ContosoAds to Azure Container Apps
 concurrency: contosoads-${{ github.ref }}
 
-on:    
+on:
+  workflow_dispatch:
   push:
     branches:
       - deploy
@@ -10,7 +11,7 @@ on:
       - '.github/workflows/deploy-app.yml'
 
 env:
-    # Specify your resource group's name
+    # Specify your resource group's name X
     RESOURCE_GROUP_NAME: contosoadsrg
 
     # Specify your preferred region

@@ -1,4 +1,4 @@
-name: Run Publisher with Environment
+name: Run APIM Publisher with Environment
 
 on:
   workflow_call:

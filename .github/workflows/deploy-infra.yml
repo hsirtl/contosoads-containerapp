@@ -1,4 +1,4 @@
-name: Deploy ContosoAds to Azure Container Apps
+name: Deploy ContosoAds infrastructure services
 concurrency: contosoads-${{ github.ref }}
 
 on:    

@@ -30,10 +30,8 @@ param imageProcessorTag string = 'latest'
 @description('Specifies the public Git repo that hosts the database migration script.')
 param repository string
 
-var vnetName = '${baseName}-vnet'
 var keyVaultName = '${baseName}${uniqueString(resourceGroup().id)}'
 var acrName = '${baseName}${uniqueString(resourceGroup().id)}'
-var storageAccountName = '${baseName}${uniqueString(resourceGroup().id)}'
 var privateDnsZoneName = '${baseName}.postgres.database.azure.com'
 var postgresHostName = 'server${uniqueString(resourceGroup().id)}'
 var databaseName = 'contosoads'
