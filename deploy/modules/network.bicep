@@ -15,7 +15,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2022-09-01' = {
   properties: {
     addressSpace: {
       addressPrefixes: [
-        '10.150.0.0/22'
+        '10.150.0.0/16'
       ]
     }
     subnets: [
