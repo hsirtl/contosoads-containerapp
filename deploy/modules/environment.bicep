@@ -37,21 +37,32 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   }
 }
 
+resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2022-09-01' = {
+  name: 'default'
+  parent: storageAccount
+}
 
-resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-08-01' = {
-  name: '${storageAccount.name}/default/${containerName}'
+resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2022-09-01' = {
+  name: containerName
+  parent: blobService
   properties: {
     publicAccess: 'Blob'
   }
 }
 
-
-resource requestQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2021-08-01' = {
-  name: '${storageAccount.name}/default/${requestQueueName}'
+resource queueService 'Microsoft.Storage/storageAccounts/queueServices@2022-09-01' = {
+  name: 'default'
+  parent: storageAccount
 }
 
-resource resultQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2021-08-01' = {
-  name: '${storageAccount.name}/default/${resultQueueName}'
+resource requestQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2022-09-01' = {
+  name: requestQueueName
+  parent: queueService
+}
+
+resource resultQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2022-09-01' = {
+  name: resultQueueName
+  parent: queueService
 }
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
