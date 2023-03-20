@@ -59,7 +59,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2022-09-01' = {
       {
         name: 'apim-delegated'
         properties: {
-          addressPrefix: '10.150.10.0/29'
+          addressPrefix: '10.150.10.0/28'
           delegations: [
             {
               name: 'Microsoft.ApiManagement/service'
