@@ -41,14 +41,7 @@ resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2022-09-01'
   name: 'default'
   parent: storageAccount
 }
-resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2022-09-01' = {
-  name: 'default'
-  parent: storageAccount
-}
 
-resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2022-09-01' = {
-  name: containerName
-  parent: blobService
 resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2022-09-01' = {
   name: containerName
   parent: blobService
@@ -57,10 +50,6 @@ resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@20
   }
 }
 
-resource queueService 'Microsoft.Storage/storageAccounts/queueServices@2022-09-01' = {
-  name: 'default'
-  parent: storageAccount
-}
 resource queueService 'Microsoft.Storage/storageAccounts/queueServices@2022-09-01' = {
   name: 'default'
   parent: storageAccount
