@@ -9,7 +9,7 @@
     "protocols": [
       "https"
     ],
-    "serviceUrl": "https://contosoads-api.proudsea-bdd14fdf.northeurope.azurecontainerapps.io",
+    "serviceUrl": "https://contosoads-api.victoriouscoast-0a0b9255.northeurope.azurecontainerapps.io",
     "subscriptionKeyParameterNames": {
       "header": "Ocp-Apim-Subscription-Key",
       "query": "subscription-key"
