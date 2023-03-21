@@ -32,8 +32,7 @@ param repository string
 
 var keyVaultName = '${baseName}${uniqueString(resourceGroup().id)}'
 var acrName = '${baseName}${uniqueString(resourceGroup().id)}'
-var privateDnsZoneName = '${baseName}.postgres.database.azure.com'
-var postgresHostName = 'server${uniqueString(resourceGroup().id)}'
+var postgresHostName = 'server-${uniqueString(resourceGroup().id)}'
 var databaseName = 'contosoads'
 
 resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
@@ -45,7 +44,6 @@ module network 'modules/network.bicep' = {
   params: {
     location: location
     baseName: baseName
-    privateDnsZoneName: privateDnsZoneName
   }
 }
 
