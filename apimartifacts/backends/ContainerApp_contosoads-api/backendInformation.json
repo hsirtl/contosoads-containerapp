@@ -3,6 +3,6 @@
     "description": "contosoads-api",
     "protocol": "http",
     "resourceId": "https://management.azure.com/subscriptions/557121b7-23aa-44c7-844e-e078277415f0/resourceGroups/contosoadsrg/providers/Microsoft.App/containerApps/contosoads-api",
-    "url": "https://contosoads-api.proudsea-bdd14fdf.northeurope.azurecontainerapps.io"
+    "url": "https://contosoads-api.victoriouscoast-0a0b9255.northeurope.azurecontainerapps.io"
   }
 }
